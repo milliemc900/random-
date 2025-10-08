@@ -32,7 +32,6 @@ def load_model():
     model = joblib.load(model_path)
     return model
 
-
 # Load model
 model = load_model()
 
@@ -49,4 +48,22 @@ BloodPressure = st.number_input("Blood Pressure", min_value=0)
 SkinThickness = st.number_input("Skin Thickness", min_value=0)
 Insulin = st.number_input("Insulin Level", min_value=0)
 BMI = st.number_input("BMI", min_value=0.0)
-DiabetesPedigreeFunction = st.number_input("Diabetes Pedigree Function", min_value=0.
+DiabetesPedigreeFunction = st.number_input("Diabetes Pedigree Function", min_value=0.0)  # ✅ Fixed parentheses
+Age = st.number_input("Age", min_value=0, step=1)
+
+# --- 5. PREDICTION BUTTON ---
+if st.button("🔍 Predict Diabetes"):
+    # Prepare input data as DataFrame
+    input_data = pd.DataFrame(
+        [[Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, Age]],
+        columns=['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']
+    )
+
+    # Make prediction
+    prediction = model.predict(input_data)
+
+    # Display result
+    if prediction[0] == 1:
+        st.error("🩸 The model predicts that this patient **has diabetes**.")
+    else:
+        st.success("✅ The model predicts that this patient **does not have diabetes**.")
